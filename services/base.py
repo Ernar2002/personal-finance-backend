@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from core import Base
+from exceptions import NotFoundException
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -24,6 +25,13 @@ class ServiceBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.query(self.model).filter(self.model.id == id).first()
+
+    def get_by_id(self, db: Session, id: Any) -> Optional[ModelType]:
+        obj_in_data = db.query(self.model).filter(self.model.id == id).first()
+
+        if obj_in_data is None:
+            raise NotFoundException(detail=f"{self.model.__name__} with id: {id} is not found")
+        return obj_in_data
 
     def get_multi(
         self, db: Session, skip: int = 0, limit: int = 100
