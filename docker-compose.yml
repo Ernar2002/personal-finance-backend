@@ -4,7 +4,7 @@ services:
 
   postgres:
     image: postgres:15.1-alpine
-    container_name: postgresql-dev
+    container_name: postgres-dev
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
       interval: 10s

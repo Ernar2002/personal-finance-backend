@@ -1,7 +1,8 @@
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 from core import Base
-from .base import Model
+from models import Model
 
 
 class User(Model, Base):
@@ -10,6 +11,7 @@ class User(Model, Base):
 
     email = Column(String(150), nullable=True, unique=True)
     password = Column(String(255), nullable=False)
-    first_name = Column(String(150), nullable=True)
-    last_name = Column(String(150), nullable=True)
-    phone_number = Column(String(32))
+    username = Column(String(20), nullable=True)
+
+    wallets = relationship("Wallet", back_populates="user")
+    categories = relationship("Category", back_populates="user")

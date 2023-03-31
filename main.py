@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from api import router
+from core import configs, get_db
 
+app = FastAPI(
+    title=configs.PROJECT_NAME,
+    description=configs.DESCRIPTION,
+    version=configs.VERSION,
+    openapi_url=f"{configs.API_V1_PREFIX}/openapi.json"
+)
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+app.include_router(router)
